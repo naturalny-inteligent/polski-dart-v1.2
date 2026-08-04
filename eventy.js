@@ -114,7 +114,7 @@ function pobierzZdarzenia(gracz) {
 
     if (gracz.kartaPDC && !gracz.dozywotniKontrakt) {
         dostepneEventy.push({
-            tekst: `Firma ${losowaMarka} proponuje mi dożywotni kontrakt - dostaję spersonalizowane lotki.`,
+            tekst: `Firma ${losowaMarka} proponuje ci dożywotni kontrakt - dostaję spersonalizowane lotki.`,
             opcje: [
                 { tekst: "Przyjmuję.", akcja: "kontrakt_tak" },
                 { tekst: "Odrzucam.", wplywSr: 0, wplywMen: 0, wplywPop: 0, wplywKasa: 0 }
@@ -124,7 +124,7 @@ function pobierzZdarzenia(gracz) {
 
     if (gracz.srednia < 50) {
         dostepneEventy.push({
-            tekst: "Kolega darter doradza mi zebym zapisal się do Legia Darts.",
+            tekst: "Kolega darter doradza ci, żebyś zapisal się do Legia Darts.",
             opcje: [
                 { tekst: "Zapisuję się.", akcja: "legia_tak" },
                 { tekst: "Nie zapisuję się.", wplywSr: 0, wplywMen: 0, wplywPop: 0, wplywKasa: 0 }
