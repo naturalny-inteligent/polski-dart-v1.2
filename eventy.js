@@ -75,7 +75,6 @@ function pobierzZdarzenia(gracz) {
                 { tekst: "Wolę potrenować.", akcja: "trening_zamiast_anal" }
             ]
         },
-        // NOWE ZDARZENIA:
         {
             tekst: "Na backstage'u znany darter przed zawodami zażywa biały proszek.",
             opcje: [
