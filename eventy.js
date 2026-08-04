@@ -7,7 +7,6 @@ function pobierzZdarzenia(gracz) {
     let losowaWaga = wagi[Math.floor(Math.random() * wagi.length)];
 
     return [
-        // STANDARDOWE
         {
             tekst: "Koledzy z drużyny proponują chlanie wódki do 4 rano na dzień przed ważnym turniejem.",
             opcje: [
@@ -22,7 +21,6 @@ function pobierzZdarzenia(gracz) {
                 { tekst: "Trenuję, zamiast gadać w internecie.", wplywSr: 4, wplywMen: -5, wplywPop: -5, wplywKasa: 0 }
             ]
         },
-        // NOWE ZGODNIE Z TWOIM WIDZIMISIĘ
         {
             tekst: `W sklepie Dartshopper zauważasz promocję na lotki ${losowaMarka} ${losowaWaga}. Twój obecny sprzęt to ${gracz.marka} ${gracz.waga}.`,
             opcje: [
@@ -42,6 +40,34 @@ function pobierzZdarzenia(gracz) {
             opcje: [
                 { tekst: "Biorę to. Pralka mi się popsuła.", akcja: "ustawka" },
                 { tekst: "Nawet nie odpisuję. Jestem sportowcem z zasadami.", wplywSr: 0, wplywMen: 5, wplywPop: 0, wplywKasa: 0 }
+            ]
+        },
+        {
+            tekst: "Spotykasz Krzysztofa Ratajskiego.",
+            opcje: [
+                { tekst: "Proszę o autograf jak fanboy.", wplywSr: 0, wplywMen: 5, wplywPop: 0, wplywKasa: 0 },
+                { tekst: "Pytam o rady na przyszłość.", wplywSr: 1, wplywMen: 0, wplywPop: 0, wplywKasa: 0 }
+            ]
+        },
+        {
+            tekst: "Dostajesz zaproszenie do gry deblowej w Złotej Bili.",
+            opcje: [
+                { tekst: "Jadę! (Mini-gra na czas)", akcja: "minigra_bila" },
+                { tekst: "Nie jadę. Kolega się obrazi, ale trudno.", wplywSr: 0, wplywMen: 0, wplywPop: 0, wplywKasa: 0 }
+            ]
+        },
+        {
+            tekst: "Groty w twoich lotkach zaczynają wypadać z tarczy. Tarcza zniszczona.",
+            opcje: [
+                { tekst: "Robię własne groty według poradnika Whitlocka.", wplywSr: 0, wplywMen: -2, wplywPop: 3, wplywKasa: 0 },
+                { tekst: "Kupuję nową tarczę Winmau Blade 6.", wplywSr: 0, wplywMen: 5, wplywPop: 0, wplywKasa: -600 }
+            ]
+        },
+        {
+            tekst: "Telewizja ANAL+ chce, żebyś wystąpił w reklamie ich stacji.",
+            opcje: [
+                { tekst: "Jestem chętny. Sława i pieniądze.", wplywSr: 0, wplywMen: 0, wplywPop: 10, wplywKasa: 1000 },
+                { tekst: "Wolę potrenować.", akcja: "trening_zamiast_anal" }
             ]
         }
     ];
