@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Symulator Darta - Tryb Kariery</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1e1e1e; color: #fff; padding: 20px; text-align: center; }
+        .container { background: #2d2d2d; max-width: 600px; margin: 0 auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); border: 2px solid #444; }
+        h1, h2, h3 { color: #4caf50; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; background: #444; color: #fff; border: 1px solid #666; border-radius: 4px; }
+        button { background-color: #4caf50; color: white; border: none; padding: 12px 20px; margin: 10px 0; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; transition: 0.3s; width: 100%; }
+        button:hover { background-color: #45a049; }
+        #error-msg { color: #ff4444; font-weight: bold; margin-bottom: 10px; }
+        
+        #ekran-rozgrywek, #ekran-podsumowania { display: none; }
+        .stats { display: flex; justify-content: space-around; margin-bottom: 25px; font-weight: bold; background: #1a1a1a; padding: 15px; border-radius: 8px; flex-wrap: wrap; text-align: center; }
+        .stats div { margin: 5px; width: 45%; }
+        #log { margin-top: 25px; text-align: left; height: 180px; overflow-y: auto; background: #111; padding: 15px; border-radius: 8px; font-size: 14px; font-family: monospace; color: #00ff00; }
+        .log-entry { margin-bottom: 5px; }
+        .radio-group { text-align: left; background: #333; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .radio-group label { display: block; margin-bottom: 10px; font-weight: normal; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<!-- EKRAN 1: TWORZENIE ZAWODNIKA -->
+<div id="ekran-startowy" class="container">
+    <h1>Kariera Dartera</h1>
+    <h2>Stwórz zawodnika</h2>
+    <div id="error-msg"></div>
+    
+    <div class="form-group">
+        <label>Imię i nazwisko:</label>
+        <input type="text" id="imie" placeholder="Wpisz coś z sensem">
+    </div>
+    <div class="form-group">
+        <label>Pseudonim:</label>
+        <input type="text" id="pseudonim" placeholder="Ksywa">
+    </div>
+    <div class="form-group">
+        <label>Wiek:</label>
+        <input type="number" id="wiek" placeholder="Liczba lat">
+    </div>
+    <div class="form-group">
+        <label>Utwór Walk-on:</label>
+        <input type="text" id="walk-on" placeholder="Muzyka na wejście">
+    </div>
+    <div class="form-group">
+        <label>Waga lotek:</label>
+        <select id="waga">
+            <option value="20g">20g</option>
+            <option value="22g">22g</option>
+            <option value="24g">24g</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Marka lotek:</label>
+        <select id="marka">
+            <option value="Unicorn">Unicorn</option>
+            <option value="Harrows">Harrows</option>
+            <option value="Winmau">Winmau</option>
+            <option value="Target">Target</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Poziom startowy:</label>
+        <select id="poziom">
+            <option value="amator">Totalny amator (Średnia 25-35)</option>
+            <option value="barowy">Gracz barowy (Średnia 45-55)</option>
+            <option value="potencjal">Zawodnik z potencjałem (Średnia 65-75)</option>
+        </select>
+    </div>
+
+    <button onclick="rozpocznijGry()">Wejdź do świata darta</button>
+</div>
+
+<!-- EKRAN 2: WYBÓR ROZGRYWEK W SEZONIE -->
+function symulujSezon() {
+        // 1. Sprawdzamy co zaznaczyłeś w radiu
+        let wybory = document.getElementsByName('liga');
+        let wybranaLiga = "boty";
+        for (let i = 0; i < wybory.length; i++) {
+            if (wybory[i].checked) wybranaLiga = wybory[i].value;
+        }
+
+        // 2. Mapowanie wyboru na TIER z bazy
+        let docelowyTier = 5;
+        if (wybranaLiga === "poznan") docelowyTier = 4;
+        else if (wybranaLiga === "bielska") docelowyTier = 3;
+
+        // Pobieramy turnieje tylko z wybranego tieru
+        let dostepneTurnieje = bazaTurniejow.filter(t => t.tier === docelowyTier);
+        if (dostepneTurnieje.length === 0) dostepneTurnieje = bazaTurniejow; // Zabezpieczenie
+
+        let liczbaTurniejowWSezonie = losujZPrzedzialu(10, 15);
+        let statystykiSezonu = {};
+        let najwyzszySukces = "Brak sukcesów. Dno i wodorosty.";
+        let maxIndeksEtapu = -1;
+        let rozegraneMecze = 0;
+
+        // 3. Symulacja każdego turnieju w sezonie
+        for (let i = 0; i < liczbaTurniejowWSezonie; i++) {
+            // Losujemy konkretny turniej z puli dostępnych dla danego tieru
+            let turniej = dostepneTurnieje[losujZPrzedzialu(0, dostepneTurnieje.length - 1)];
+            let fazaOstatnia = "Odpadnięcie przed turniejem";
+            let lokalnyMaxIndeks = -1;
+
+            // Symulacja przejścia przez drabinkę
+            for (let j = 0; j < turniej.etapy.length; j++) {
+                let etap = turniej.etapy[j];
+                rozegraneMecze++;
+                
+                // Rzut kością: Twoja średnia +- odchylenie vs wymagana średnia
+                let rzut = losujZPrzedzialu(-5, 7);
+                let mojaFormaWMeczu = gracz.srednia + rzut;
+
+                if (mojaFormaWMeczu >= etap.sr) {
+                    fazaOstatnia = etap.faza;
+                    lokalnyMaxIndeks = j;
+                    // Jeśli to finał i wygraliśmy:
+                    if (j === turniej.etapy.length - 1) {
+                        fazaOstatnia = "ZWYCIĘSTWO W TURNIEJU";
+                    }
+                } else {
+                    break; // Odpadasz, pętla drabinki się kończy
+                }
+            }
+
+            // Zapisujemy, na jakim etapie gracz zakończył ten konkretny turniej
+            if (statystykiSezonu[fazaOstatnia]) {
+                statystykiSezonu[fazaOstatnia]++;
+            } else {
+                statystykiSezonu[fazaOstatnia] = 1;
+            }
+
+            // Aktualizacja największego sukcesu w całym sezonie
+            if (lokalnyMaxIndeks > maxIndeksEtapu) {
+                maxIndeksEtapu = lokalnyMaxIndeks;
+                najwyzszySukces = `${fazaOstatnia} (${turniej.nazwa})`;
+            }
+        }
+
+        // 4. Kalkulacja postępów po sezonie
+        let zmianaSredniej = losujZPrzedzialu(-2, 3);
+        if (maxIndeksEtapu >= 2) zmianaSredniej += losujZPrzedzialu(1, 3); // Bonus za głębokie zajście w drabince
+        if (maxIndeksEtapu === -1) zmianaSredniej -= losujZPrzedzialu(1, 2); // Kara za bycie beznadziejnym
+
+        let zmianaPsychiki = losujZPrzedzialu(-15, 10);
+        if (maxIndeksEtapu >= 3) zmianaPsychiki += 20;
+
+        gracz.srednia += zmianaSredniej;
+        gracz.psychika += zmianaPsychiki;
+        gracz.mecze += rozegraneMecze;
+        gracz.exp += rozegraneMecze * 10;
+
+        // Blokady limitów
+        if (gracz.psychika > 100) gracz.psychika = 100;
+        if (gracz.psychika < 0) gracz.psychika = 0;
+        gracz.dable = Math.max(5, Math.floor(gracz.srednia / 2.5) + losujZPrzedzialu(-5, 5));
+
+        generujPodsumowanie(liczbaTurniejowWSezonie, statystykiSezonu, najwyzszySukces, zmianaSredniej, zmianaPsychiki, rozegraneMecze);
+    }
+
+    function generujPodsumowanie(ileTurniejow, statystyki, maxSukces, zmSredniej, zmPsychiki, m) {
+        document.getElementById('ekran-rozgrywek').style.display = 'none';
+        document.getElementById('ekran-podsumowania').style.display = 'block';
+
+        let psychikaKolor = zmPsychiki < 0 ? "#ff4444" : "#4caf50";
+        let sredniaKolor = zmSredniej < 0 ? "#ff4444" : "#4caf50";
+
+        let raport = `
+            <div class="log-entry"><b>KONIEC SEZONU. Wystąpiłeś w ${ileTurniejow} turniejach.</b></div>
+            <hr>
+            <div class="log-entry" style="color: #ffd700;"><b>Największy sukces w tym roku: ${maxSukces}</b></div>
+            <br><div class="log-entry"><b>Historia startów:</b></div>
+        `;
+
+        // Generowanie listy wyników (ile razy gdzie odpadłeś)
+        for (let faza in statystyki) {
+            raport += `<div class="log-entry">- Zakończono na: ${faza} (Ilość: ${statystyki[faza]})</div>`;
+        }
+
+        raport += `
+            <hr>
+            <div class="log-entry">Rozegrane mecze łącznie w sezonie: ${m}</div>
+            <div class="log-entry">Zmiana średniej: <span style="color:${sredniaKolor}">${zmSredniej > 0 ? '+'+zmSredniej : zmSredniej}</span> (Nowa bazowa: ${gracz.srednia.toFixed(1)})</div>
+            <div class="log-entry">Aktualna skuteczność na podwójnych: ${gracz.dable}%</div>
+            <div class="log-entry">Wpływ na psychikę: <span style="color:${psychikaKolor}">${zmPsychiki > 0 ? '+'+zmPsychiki : zmPsychiki}</span> (Stan: ${gracz.psychika}/100)</div>
+            <div class="log-entry">Całkowite doświadczenie: ${gracz.exp} punktów</div>
+        `;
+
+        if (gracz.psychika < 20) {
+            raport += `<br><div class="log-entry" style="color:#ff4444"><b>OSTRZEŻENIE:</b> Psychika w gruzach. Jeśli nie odpoczniesz, złapiesz dartitis.</div>`;
+        }
+
+        document.getElementById('log').innerHTML = raport;
+    }
+    function nastepnySezon() {
+        przejdzDoRozgrywek();
+    }
+</script>
+</body>
+</html>
