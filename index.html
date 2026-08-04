@@ -255,7 +255,7 @@
     }
 
     function odswiezHub() {
-        // Blokada śmierci mentalnej (Koniec gry)
+        // Slaby mental (Koniec gry)
         if (gracz.mentalnosc <= 0) {
             zakonczKariere("Zły stan psychiczny całkowicie uniemożliwia ci dalszą grę w darta. Zaawansowany dartitis. Koniec złudzeń.");
             return;
@@ -365,7 +365,6 @@
 
     /* --- LOGIKA EVENTÓW I SYMULACJI --- */
     function uruchomZdarzenie(docelowyTier, nazwaLigi) {
-        // Kontuzja łokcia (1%)
         if (Math.random() < 0.01) {
             zakonczKariere("KONTUZJA ŁOKCIA! Zrywasz ścięgno podczas machania ręką na treningu. To definitywny koniec kariery.");
             return;
@@ -394,33 +393,97 @@
 
     function wybierzOpcjeEventu(indeks) {
         let opcja = obecnyEvent.opcje[indeks];
-        document.getElementById('ekran-eventu').style.display = 'none';
-        
-        let zmSr = 0, zmMen = 0, zmPop = 0, zmKas = 0;
         let tekstDecyzji = opcja.tekst;
 
-        // Analiza akcji specjalnych z eventy.js
         if (opcja.akcja) {
-            if (opcja.akcja === "zmiana_lotek") {
+            if (opcja.akcja === "trening_zamiast_anal") {
+                let zmSr = losujZPrzedzialu(1, 5);
+                tekstDecyzji += ` (Ciężki trening popłaca. Średnia +${zmSr})`;
+                document.getElementById('ekran-eventu').style.display = 'none';
+                kontynuujSymulacje(zmSr, 0, 0, 0, tekstDecyzji);
+                return;
+            } 
+            else if (opcja.akcja === "minigra_bila") {
+                document.getElementById('event-opis').innerText = "Szybki mecz deblowy w Złotej Bili! Kliknij przycisk 15 razy w 5 sekund, inaczej przegrasz.";
+                let divOpcje = document.getElementById('event-opcje');
+                divOpcje.innerHTML = `
+                    <div id="minigra-czas" style="font-size:30px; font-weight:bold; color:#ff9800; margin-bottom:15px;">5.0 s</div>
+                    <button id="minigra-btn" class="big-btn" style="background:#00d2ff; color:#000; font-size:24px; padding:30px;">KLIKNIJ (0/15)</button>
+                `;
+                
+                let clicks = 0;
+                let timeLeft = 5.0;
+                let btn = document.getElementById('minigra-btn');
+                let timerEl = document.getElementById('minigra-czas');
+                
+                let timer = setInterval(() => {
+                    timeLeft -= 0.1;
+                    timerEl.innerText = Math.max(0, timeLeft).toFixed(1) + " s";
+                    if (timeLeft <= 0.01) {
+                        clearInterval(timer);
+                        btn.disabled = true;
+                        if (clicks >= 15) {
+                            divOpcje.innerHTML = `<button class="start-btn" onclick="zakonczMinigre(true)">WYGRAŁEŚ! Zgarniasz 1000 PLN.</button>`;
+                        } else {
+                            divOpcje.innerHTML = `<button class="start-btn" onclick="zakonczMinigre(false)">PRZEGRAŁEŚ! Mentalność siada ze zmęczenia.</button>`;
+                        }
+                    }
+                }, 100);
+                
+                btn.onclick = () => {
+                    clicks++;
+                    btn.innerText = `KLIKNIJ (${clicks}/15)`;
+                    if(clicks >= 15) {
+                        clearInterval(timer);
+                        btn.disabled = true;
+                        divOpcje.innerHTML = `<button class="start-btn" onclick="zakonczMinigre(true)">WYGRAŁEŚ! Zgarniasz 1000 PLN.</button>`;
+                    }
+                };
+                return; 
+            }
+            else if (opcja.akcja === "zmiana_lotek") {
                 gracz.marka = opcja.marka; gracz.waga = opcja.waga;
-                zmSr = losujZPrzedzialu(-5, 5);
+                let zmSr = losujZPrzedzialu(-5, 5);
                 tekstDecyzji += ` (Nowy sprzęt założony. Zmiana średniej: ${zmSr})`;
-            } else if (opcja.akcja === "ai_slop") {
+                document.getElementById('ekran-eventu').style.display = 'none';
+                kontynuujSymulacje(zmSr, 0, 0, 0, tekstDecyzji);
+                return;
+            } 
+            else if (opcja.akcja === "ai_slop") {
+                let zmMen = 0, zmPop = 0;
                 if (Math.random() < 0.75) { zmMen = 2; tekstDecyzji += " (Fani to docenili. Ment. +2)"; } 
                 else { zmPop = -30; tekstDecyzji += " (Zbanowali cię. Popularność spadła o 30!)"; }
-            } else if (opcja.akcja === "ustawka") {
+                document.getElementById('ekran-eventu').style.display = 'none';
+                kontynuujSymulacje(0, zmMen, zmPop, 0, tekstDecyzji);
+                return;
+            } 
+            else if (opcja.akcja === "ustawka") {
+                let zmKas = 0, zmMen = 0, zmPop = 0;
                 if (Math.random() < 0.5) { 
                     zmKas = 10000; zmMen = 5; tekstDecyzji += " (Wygrałeś! 10000 PLN i pralka są twoje!)"; 
                 } else { 
                     zmPop = -50; gracz.zawieszenie = 2; tekstDecyzji += " (DRAKA! Złapali cię. Zawieszenie na 2 lata, pop. -50!)"; 
                 }
+                document.getElementById('ekran-eventu').style.display = 'none';
+                kontynuujSymulacje(0, zmMen, zmPop, zmKas, tekstDecyzji);
+                return;
             }
-        } else {
-            zmSr = opcja.wplywSr || 0; zmMen = opcja.wplywMen || 0;
-            zmPop = opcja.wplywPop || 0; zmKas = opcja.wplywKasa || 0;
-        }
-
+        } 
+        
+        let zmSr = opcja.wplywSr || 0; let zmMen = opcja.wplywMen || 0;
+        let zmPop = opcja.wplywPop || 0; let zmKas = opcja.wplywKasa || 0;
+        
+        document.getElementById('ekran-eventu').style.display = 'none';
         kontynuujSymulacje(zmSr, zmMen, zmPop, zmKas, tekstDecyzji);
+    }
+
+    function zakonczMinigre(wygrana) {
+        document.getElementById('ekran-eventu').style.display = 'none';
+        if (wygrana) {
+            kontynuujSymulacje(0, 0, 0, 1000, "Zwycięstwo w Złotej Bili! Szybkość zaprocentowała (+1000 PLN).");
+        } else {
+            kontynuujSymulacje(0, -10, 0, 0, "Porażka w Złotej Bili. Brak refleksu, a zmęczenie dojechało psychikę (Mentalność -10).");
+        }
     }
 
     function kontynuujSymulacje(zmianaSrEv, zmianaMenEv, zmianaPopEv, zmianaKasaEv, tekstDecyzji) {
@@ -432,7 +495,6 @@
         if (gracz.popularnosc > 100) gracz.popularnosc = 100;
         if (gracz.popularnosc < 0) gracz.popularnosc = 0;
 
-        // Jeśli dostał bana w ewencie, przerywamy pętlę turniejów w tym sezonie
         if (gracz.zawieszenie > 0) {
             historia.push({ sezon: sezon, liga: aktywnaNazwaLigi, sukces: "WYKLUCZENIE DYSCYPLINARNE", srednia: gracz.srednia.toFixed(1), kasaZarobiona: zmianaKasaEv });
             generujRaport(0, 0, "DYSKWALIFIKACJA", gracz.srednia - zmianaSrEv, gracz.mentalnosc - zmianaMenEv, tekstDecyzji, zmianaKasaEv);
@@ -503,6 +565,7 @@
         raport += `> Rozegrane turnieje: ${turnieje} | Mecze: ${mecze}<br><br>`;
         raport += `> Zmiana średniej: <span style="color:${kolorSr}">${zmianaSr > 0 ? '+'+zmianaSr : zmianaSr}</span> (Obecnie: ${gracz.srednia.toFixed(1)})<br>`;
         raport += `> Zmiana mentalności: <span style="color:${kolorMen}">${zmianaMen > 0 ? '+'+zmianaMen : zmianaMen}</span> (Stan: ${gracz.mentalnosc}/100)<br>`;
+        raport += `> Popularność: ${gracz.popularnosc}/100<br>`;
         raport += `> Wpływ na konto: <b style="color: #4caf50;">+${zarobionoKasy.toLocaleString('pl-PL')} PLN</b><br>`;
         
         if (gracz.mentalnosc <= 20 && gracz.mentalnosc > 0) raport += `<br><span style="color: #ff5555;">> UWAGA: Zbliżasz się do granicy załamania psychicznego (dartitis).</span>`;
