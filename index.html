@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Kariera Polskiego Dartera- VOVLO MEDIA POLAND</title>
+    <title>Kariera Polskiego Dartera - VOVLO MEDIA POLAND</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1e1e1e; color: #e0e0e0; padding: 20px; text-align: center; }
         .container { background: #252526; max-width: 800px; margin: 0 auto; padding: 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); border: 1px solid #333; }
@@ -878,6 +878,38 @@
         document.getElementById('koniec-raport').innerHTML = podsumowanie;
         document.getElementById('koniec-tytul').innerText = ocena;
     }
+let ostatniSprawdzonyWiek = 0;
+    const oryginalnyOdswiezHub = odswiezHub;
+
+    odswiezHub = function() {
+        // 1. Twardy limit maksymalnej średniej (180 punktów)
+        if (gracz.srednia > 180) {
+            gracz.srednia = 180;
+        }
+
+        // 2. Wymuszona emerytura w wieku 80 lat
+        if (gracz.wiek >= 80) {
+            zakonczKariere("Dziadek, kończ już karierę.");
+            return; // Zatrzymujemy logikę, aby gracz nie wszedł do Huba
+        }
+
+        // 3. Spadek formy po 55. roku życia
+        // Zabezpieczenie sprawdza, czy wiek się zmienił, aby odejmować średnią tylko raz na sezon
+        if (gracz.wiek > 55 && gracz.wiek !== ostatniSprawdzonyWiek) {
+            // Zabezpieczenie: jeśli gracz startuje karierę po 55. roku życia, nie karzemy go w 1. sezonie
+            if (ostatniSprawdzonyWiek !== 0) {
+                let naturalnySpadek = (Math.random() * 2 + 1); // Spadek od 1.0 do 3.0 punktów
+                gracz.srednia -= naturalnySpadek;
+                
+                // Chronimy średnią przed spadkiem poniżej absolutnego zera
+                if (gracz.srednia < 10) gracz.srednia = 10;
+            }
+            ostatniSprawdzonyWiek = gracz.wiek;
+        }
+
+        // Wywołujemy oryginalną funkcję odświeżającą interfejs z przeliczonymi danymi
+        oryginalnyOdswiezHub();
+    };
 </script>
 </body>
 </html>
