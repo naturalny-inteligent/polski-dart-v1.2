@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Symulator Darta - VOVLO MEDIA POLAND</title>
+    <title>Kariera Polskiego Dartera- VOVLO MEDIA POLAND</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1e1e1e; color: #e0e0e0; padding: 20px; text-align: center; }
         .container { background: #252526; max-width: 800px; margin: 0 auto; padding: 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); border: 1px solid #333; }
@@ -58,7 +58,7 @@
 <!-- EKRAN 1: TWORZENIE ZAWODNIKA -->
 <div id="ekran-startowy" class="container">
     <h1>Kariera Polskiego Dartera</h1>
-    <h2>v1.3</h2>
+    <h2>v1.4</h2>
     <h3>Kreator Zawodnika</h3>
     <h4>VOVLO MEDIA POLAND</h4>
     <div id="error-msg"></div>
@@ -862,7 +862,12 @@
         if (gracz.mentalnosc <= 0) ocena += " Niestety, presja otoczenia okazała się dla Ciebie zbyt trudna do zniesienia.";
         if (gracz.zawieszenie > 0) ocena += " Szkoda tylko problemów z komisją dyscyplinarną po drodze.";
 
+                let walkonSelect = document.getElementById('walk-on');
+        let walkonTekst = walkonSelect.options[walkonSelect.selectedIndex].text;
+
         let podsumowanie = `
+            > <b>${gracz.imie} "${gracz.pseudonim}"</b><br>
+            > Utwór wejściowy (Walk-on): ${walkonTekst}<br>
             > Rozegrane sezony: ${sezon - 1}<br>
             > Wiek zawodnika na finiszu: ${gracz.wiek} lat<br>
             > Ostatnia odnotowana średnia z rzutu: ${gracz.srednia.toFixed(1)}<br>
