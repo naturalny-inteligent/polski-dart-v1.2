@@ -51,7 +51,7 @@ function pobierzZdarzenia(gracz) {
         {
             tekst: "Dostajesz zaproszenie do gry deblowej w Złotej Bili.",
             opcje: [
-                { tekst: "Jadę! (Mini-gra na czas)", akcja: "minigra_bila" },
+                { tekst: "Jadę!", akcja: "minigra_bila" },
                 { tekst: "Nie jadę. Kolega się obrazi, ale trudno.", wplywSr: 0, wplywMen: 0, wplywPop: 0, wplywKasa: 0 }
             ]
         },
@@ -84,9 +84,9 @@ function pobierzZdarzenia(gracz) {
             ]
         },
         {
-            tekst: "Kluczowy moment sezonu! Kończysz 'Big Fisha' (170 punktów). Trafiłeś dwie potrójne 20, został rzut na Bullseye.",
+            tekst: "Stoisz przed wielką szansą! Kończysz 'Big Fisha'. Trafiłeś dwie potrójne 20, został rzut w czerwony środek.",
             opcje: [
-                { tekst: "Rzucam! (Mini-gra: Pijana ręka)", akcja: "mecz_bullseye" }
+                { tekst: "Rzucam!", akcja: "mecz_bullseye" }
             ]
         }
     ];
