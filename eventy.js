@@ -28,7 +28,7 @@ function pobierzZdarzenia(gracz) {
             ]
         },
         {
-            tekst: `Dart Leżajsk wrzuca na Facebooka wygenerowany w AI obrazek z twoją twarzą i wielkim napisem: "Rzucaj jak ${gracz.imie} ${gracz.pseudonim}".`,
+            tekst: `Dart Leżajsk wrzuca na Facebooka wygenerowany w AI obrazek z twoją twarzą i wielkim napisem: "Rzucaj jak "${gracz.pseudonim}" ${gracz.imie}".`,
             opcje: [
                 { tekst: "Zostawiam lajka, nieważne że mam 7 palców i trzymam lotkę za piórka.", wplywSr: 0, wplywMen: -2, wplywPop: 5, wplywKasa: 0 },
                 { tekst: "Wyśmiewam ten AI slop w komentarzu.", akcja: "ai_slop" }
