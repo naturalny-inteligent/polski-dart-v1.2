@@ -887,27 +887,29 @@ let ostatniSprawdzonyWiek = 0;
             gracz.srednia = 180;
         }
 
-        // 2. Wymuszona emerytura w wieku 80 lat
-        if (gracz.wiek >= 80) {
-            zakonczKariere("Dziadek, kończ już karierę.");
-            return; // Zatrzymujemy logikę, aby gracz nie wszedł do Huba
-        }
-
-        // 3. Spadek formy po 55. roku życia
-        // Zabezpieczenie sprawdza, czy wiek się zmienił, aby odejmować średnią tylko raz na sezon
+        // 2. Spadek formy po 55. roku życia 
         if (gracz.wiek > 55 && gracz.wiek !== ostatniSprawdzonyWiek) {
-            // Zabezpieczenie: jeśli gracz startuje karierę po 55. roku życia, nie karzemy go w 1. sezonie
             if (ostatniSprawdzonyWiek !== 0) {
                 let naturalnySpadek = (Math.random() * 2 + 1); // Spadek od 1.0 do 3.0 punktów
                 gracz.srednia -= naturalnySpadek;
-                
-                // Chronimy średnią przed spadkiem poniżej absolutnego zera
                 if (gracz.srednia < 10) gracz.srednia = 10;
             }
             ostatniSprawdzonyWiek = gracz.wiek;
         }
 
-        // Wywołujemy oryginalną funkcję odświeżającą interfejs z przeliczonymi danymi
+        // 3. Wymuszona emerytura w wieku 80 lat
+        if (gracz.wiek >= 80) {
+            zakonczKariere("Dziadek, kończ już karierę. Czas zawiesić lotki na kołku.");
+            
+            // Asynchroniczna zapadka: czeka, aż inne funkcje skończą działanie,
+            // a następnie definitywnie ukrywa ekran Huba i blokuje klikanie.
+            setTimeout(() => {
+                document.getElementById('ekran-hub').style.display = 'none';
+            }, 10);
+            
+            return; 
+        }
+
         oryginalnyOdswiezHub();
     };
 </script>
