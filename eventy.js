@@ -45,7 +45,7 @@ function pobierzZdarzenia(gracz) {
         {
             tekst: "Spotykasz Krzysztofa Ratajskiego.",
             opcje: [
-                { tekst: "Proszę o autograf jak fanboy.", wplywSr: 0, wplywMen: 5, wplywPop: 0, wplywKasa: 0 },
+                { tekst: "Błagam na kolanach o zdjęcie i autograf.", wplywSr: 0, wplywMen: 5, wplywPop: 0, wplywKasa: 0 },
                 { tekst: "Pytam o rady na przyszłość.", wplywSr: 1, wplywMen: 0, wplywPop: 0, wplywKasa: 0 }
             ]
         },
@@ -57,10 +57,10 @@ function pobierzZdarzenia(gracz) {
             ]
         },
         {
-            tekst: "Groty w twoich lotkach zaczynają wypadać z tarczy. Tarcza zniszczona.",
+            tekst: "Groty w twoich lotkach zaczynają wypadać z tarczy.",
             opcje: [
                 { tekst: "Robię własne groty według poradnika Whitlocka.", wplywSr: 0, wplywMen: -2, wplywPop: 3, wplywKasa: 0 },
-                { tekst: "Kupuję nową tarczę Winmau Blade 6.", wplywSr: 0, wplywMen: 5, wplywPop: 0, wplywKasa: -600 }
+                { tekst: "Kupuję nową tarczę Winmau Blade X.", wplywSr: 0, wplywMen: 5, wplywPop: 0, wplywKasa: -600 }
             ]
         },
         {
