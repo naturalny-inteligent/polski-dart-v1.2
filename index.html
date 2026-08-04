@@ -58,7 +58,7 @@
 <!-- EKRAN 1: TWORZENIE ZAWODNIKA -->
 <div id="ekran-startowy" class="container">
     <h1>Kariera Polskiego Dartera</h1>
-    <h2>v1.5</h2>
+    <h2>v1.5.1</h2>
     <h3>Kreator Zawodnika</h3>
     <h4>VOVLO MEDIA POLAND</h4>
     <div id="error-msg"></div>
@@ -882,9 +882,9 @@ let ostatniSprawdzonyWiek = 0;
     const oryginalnyOdswiezHub = odswiezHub;
 
     odswiezHub = function() {
-        // 1. Twardy limit maksymalnej średniej (180 punktów)
-        if (gracz.srednia > 180) {
-            gracz.srednia = 180;
+        // 1. Twardy limit maksymalnej średniej (140 punktów)
+        if (gracz.srednia > 132) {
+            gracz.srednia = 132;
         }
 
         // 2. Spadek formy po 55. roku życia 
