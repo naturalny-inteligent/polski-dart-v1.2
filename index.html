@@ -252,7 +252,7 @@
 </div>
 
 <script>
-    let gracz = { imie: "", pseudonim: "", waga: "", marka: "", wiek: 0, srednia: 0, mentalnosc: 100, popularnosc: 0, kasa: 0, mecze: 0, kartaPDC: false, zawieszenie: 0 };
+    let gracz = { imie: "", pseudonim: "", waga: "", marka: "", wiek: 0, srednia: 0, mentalnosc: 100, popularnosc: 0, kasa: 0, mecze: 0, kartaPDC: false, zawieszenie: 0, dozywotniKontrakt: false };
     let sezon = 1;
     let historia = [];
     let qSchoolObecnyDzien = 1;
@@ -472,6 +472,87 @@
                 document.getElementById('ekran-eventu').style.display = 'none';
                 startMinigraTiming();
                 return;
+            else if (opcja.akcja === "wywiad_lnd") {
+                let odp = prompt("Redaktor pyta: Jakie masz rady dla początkujących darterów?");
+                if (Math.random() < 0.5) {
+                    tekstDecyzji += ` (Powiedziałeś: "${odp}". Czytelnicy są zachwyceni! Popularność +15)`;
+                    document.getElementById('ekran-eventu').style.display = 'none';
+                    kontynuujSymulacje(0, 0, 15, 0, tekstDecyzji);
+                } else {
+                    tekstDecyzji += ` (Powiedziałeś: "${odp}". Czytelnicy są oburzeni i uważają cię za idiotę! Popularność -10)`;
+                    document.getElementById('ekran-eventu').style.display = 'none';
+                    kontynuujSymulacje(0, 0, -10, 0, tekstDecyzji);
+                }
+                return;
+            }
+            else if (opcja.akcja === "fota_tak") {
+                if (Math.random() < 0.5) {
+                    tekstDecyzji += " (Młody wrzuca fotkę na IG i idzie w viral! Popularność +50)";
+                    document.getElementById('ekran-eventu').style.display = 'none';
+                    kontynuujSymulacje(0, 0, 50, 0, tekstDecyzji);
+                } else {
+                    tekstDecyzji += " (Gdy robicie sobie zdjęcie, młody wyciąga ci z kieszeni telefon! Tracisz 2000 PLN)";
+                    document.getElementById('ekran-eventu').style.display = 'none';
+                    kontynuujSymulacje(0, 0, 0, -2000, tekstDecyzji);
+                }
+                return;
+            }
+            else if (opcja.akcja === "fota_nie") {
+                if (Math.random() < 0.5) {
+                    tekstDecyzji += " (Smutny dzieciak odchodzi. Brak zmian.)";
+                    document.getElementById('ekran-eventu').style.display = 'none';
+                    kontynuujSymulacje(0, 0, 0, 0, tekstDecyzji);
+                } else {
+                    tekstDecyzji += " (Media dowiadują się o tym i zostajesz skrytykowany. Popularność -5)";
+                    document.getElementById('ekran-eventu').style.display = 'none';
+                    kontynuujSymulacje(0, 0, -5, 0, tekstDecyzji);
+                }
+                return;
+            }
+            else if (opcja.akcja === "kontrakt_tak") {
+                gracz.dozywotniKontrakt = true;
+                tekstDecyzji += " (Otrzymujesz dożywotni kontrakt i spersonalizowane lotki! +5000 PLN, Mentalność +10)";
+                document.getElementById('ekran-eventu').style.display = 'none';
+                kontynuujSymulacje(0, 10, 0, 5000, tekstDecyzji);
+                return;
+            }
+            else if (opcja.akcja === "kibice_miny") {
+                let losoweMen = losujZPrzedzialu(-10, 10);
+                tekstDecyzji += ` (Podburzasz kibiców. Popularność -5, Mentalność ${losoweMen > 0 ? '+'+losoweMen : losoweMen})`;
+                document.getElementById('ekran-eventu').style.display = 'none';
+                kontynuujSymulacje(0, losoweMen, -5, 0, tekstDecyzji);
+                return;
+            }
+            else if (opcja.akcja === "kibice_muzyka") {
+                let walkonSelect = document.getElementById('walk-on');
+                let randomIndex = Math.floor(Math.random() * walkonSelect.options.length);
+                walkonSelect.selectedIndex = randomIndex;
+                let nowaMuzyka = walkonSelect.options[randomIndex].text;
+                
+                let odtwarzacz = document.getElementById('odtwarzacz');
+                if (walkonSelect.value !== "cisza") {
+                    odtwarzacz.src = walkonSelect.value;
+                    odtwarzacz.play().catch(e => console.warn("Auto-play blocked"));
+                } else {
+                    odtwarzacz.pause();
+                }
+
+                tekstDecyzji += ` (Zmieniasz muzykę na losową: ${nowaMuzyka}. Popularność +10, Mentalność -10)`;
+                document.getElementById('ekran-eventu').style.display = 'none';
+                kontynuujSymulacje(0, -10, 10, 0, tekstDecyzji);
+                return;
+            }
+            else if (opcja.akcja === "legia_tak") {
+                if (Math.random() < 0.70) {
+                    tekstDecyzji += " (Wydajesz 5000 PLN na trening w Legia Darts, ale opłaca się! Średnia +15)";
+                    document.getElementById('ekran-eventu').style.display = 'none';
+                    kontynuujSymulacje(15, 0, 0, -5000, tekstDecyzji);
+                } else {
+                    tekstDecyzji += " (Wydajesz 15000 PLN na trening, ale okazuje się, że jesteś tak słaby, że nawet tam nie są w stanie ci pomóc.)";
+                    document.getElementById('ekran-eventu').style.display = 'none';
+                    kontynuujSymulacje(0, 0, 0, -15000, tekstDecyzji);
+                }
+                return;
             }
             else if (opcja.akcja === "trening_zamiast_anal") {
                 let zmSr = losujZPrzedzialu(1, 5);
@@ -688,7 +769,7 @@
         // Skrypt poruszający tarcze imitujący nerwowość gracza
         bullseyeInterval = setInterval(() => {
             let trzesienie = (100 - gracz.mentalnosc) / 3;
-            if(trzesienie < 5) trzesienie = 5; // Minimalne drgania nawet przy perfekcyjnej mentalności
+            if(trzesienie < 10) trzesienie = 10; // Minimalne drgania nawet przy perfekcyjnej mentalności
 
             posX += losujZPrzedzialu(-trzesienie, trzesienie);
             posY += losujZPrzedzialu(-trzesienie, trzesienie);
