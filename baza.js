@@ -71,7 +71,7 @@ const bazaZawodnikow = [
 
     // TIER 4 - Gracze lokalni z potencjałem
     { imie: "Dawid", nazwisko: "Lasek", srednia: 72, tier: 4 },
-    { imie: "Damian", nazwisko: "Pałaszewski", srednia: 70, tier: 4 },
+    { imie: "Damian", nazwisko: "Pałaszewski", srednia: 71, tier: 4 },
     { imie: "Tomasz", nazwisko: "Roszyk", srednia: 68, tier: 4 },
     { imie: "Kamil", nazwisko: "Zieliński", srednia: 66, tier: 4 },
     { imie: "Dominik", nazwisko: "Rojek", srednia: 65, tier: 4 }
