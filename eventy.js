@@ -64,6 +64,12 @@ function pobierzZdarzenia(gracz) {
             ]
         },
         {
+            tekst: "Kluczowy moment sezonu! Trafiasz do finału ważnego turnieju. Decydujący leg, jesteś przy tarczy. 40 punktów do końca.",
+            opcje: [
+                { tekst: "Podchodzę do oche. Zrobię to!", akcja: "mecz_timing" }
+            ]
+        },
+        {
             tekst: "Telewizja ANAL+ chce, żebyś wystąpił w reklamie ich stacji.",
             opcje: [
                 { tekst: "Jestem chętny. Sława i pieniądze.", wplywSr: 0, wplywMen: 0, wplywPop: 10, wplywKasa: 1000 },
