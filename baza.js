@@ -20,7 +20,7 @@ const bazaTurniejow = [
 
     // TIER 2 - Przedsionek profesjonalizmu
     { nazwa: "Modus Super Series", tier: 2, etapy: [{ faza: "Grupa A/B/C", sr: 84 }, { faza: "Faza Zwycięzców", sr: 86 }, { faza: "Półfinał Tygodnia", sr: 88 }, { faza: "Finał Tygodnia", sr: 90 }] },
-    { nazwa: "Players Championship (Rezerwowy)", tier: 2, etapy: [{ faza: "1/64 Finału", sr: 85 }, { faza: "1/32 Finału", sr: 87 }, { faza: "1/16 Finału", sr: 89 }, { faza: "1/8 Finału", sr: 91 }, { faza: "Ćwierćfinał", sr: 93 }, { faza: "Półfinał", sr: 95 }, { faza: "Finał", sr: 97 }] },
+    { nazwa: "Players Championship", tier: 2, etapy: [{ faza: "1/64 Finału", sr: 85 }, { faza: "1/32 Finału", sr: 87 }, { faza: "1/16 Finału", sr: 89 }, { faza: "1/8 Finału", sr: 91 }, { faza: "Ćwierćfinał", sr: 93 }, { faza: "Półfinał", sr: 95 }, { faza: "Finał", sr: 97 }] },
     { nazwa: "Development Tour", tier: 2, etapy: [{ faza: "1/128 Finału", sr: 82 }, { faza: "1/64 Finału", sr: 84 }, { faza: "1/32 Finału", sr: 86 }, { faza: "1/16 Finału", sr: 88 }, { faza: "1/8 Finału", sr: 90 }, { faza: "Ćwierćfinał", sr: 92 }, { faza: "Półfinał", sr: 94 }, { faza: "Finał", sr: 96 }] },
 
     // TIER 1 - Pro Tour
