@@ -622,7 +622,7 @@
             clearInterval(timingInterval);
             setTimeout(() => zakonczMinigreTiming(true), 1500);
         } else {
-            let gdzie = timingPozycja > 52 ? "za wysoko nad topem" : "całkowicie obok drutu";
+            let gdzie = timingPozycja > 52 ? "za wysoko" : "tuż obok drutu";
             log.innerHTML += `> Pudło! Lotka poleciała ${gdzie}.<br>`;
             
             if (dostepneLotki === 0) {
