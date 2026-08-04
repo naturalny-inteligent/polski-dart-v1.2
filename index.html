@@ -58,7 +58,7 @@
 <!-- EKRAN 1: TWORZENIE ZAWODNIKA -->
 <div id="ekran-startowy" class="container">
     <h1>Kariera Polskiego Dartera</h1>
-    <h2>v1.5.1</h2>
+    <h2>v1.5.2</h2>
     <h3>Kreator Zawodnika</h3>
     <h4>VOVLO MEDIA POLAND</h4>
     <div id="error-msg"></div>
@@ -890,7 +890,7 @@ let ostatniSprawdzonyWiek = 0;
         // 2. Spadek formy po 55. roku życia 
         if (gracz.wiek > 55 && gracz.wiek !== ostatniSprawdzonyWiek) {
             if (ostatniSprawdzonyWiek !== 0) {
-                let naturalnySpadek = (Math.random() * 2 + 1); // Spadek od 1.0 do 3.0 punktów
+                let naturalnySpadek = (Math.random() * 3 + 1); // Spadek od 1.0 do 3.0 punktów
                 gracz.srednia -= naturalnySpadek;
                 if (gracz.srednia < 10) gracz.srednia = 10;
             }
